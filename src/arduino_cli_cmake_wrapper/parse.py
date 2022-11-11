@@ -3,10 +3,13 @@ import shlex
 from pathlib import Path
 from typing import Dict
 from typing import List
+from typing import Optional
 
 
 def lines_between(
-    output_lines: List[str], start_phrase: str, end_phrase: str = None
+    output_lines: List[str],
+    start_phrase: str,
+    end_phrase: Optional[str] = None,
 ) -> List[str]:
     """Subset the supplied lines into those between start_phrase and end_phrase.
 

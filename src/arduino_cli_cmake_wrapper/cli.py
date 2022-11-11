@@ -11,6 +11,7 @@ import sys
 import tempfile
 from pathlib import Path
 from typing import List
+from typing import Optional
 
 from .parse import parse_compilation_commands
 from .parse import parse_linker_commands
@@ -23,7 +24,7 @@ This tool will run a test compilation
 """
 
 
-def parse_arguments(arguments: List[str]) -> argparse.Namespace:
+def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
     """Parse input arguments to influence the execution.
 
     The script needs to know where to copy the core library into the
