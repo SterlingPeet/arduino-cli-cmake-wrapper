@@ -56,13 +56,13 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
     return parser.parse_args(arguments)
 
 
-def main(arguments: List[str] = None):
+def main(cli_args_list: Optional[List[str]] = None):
     """Perform entrypoint functions."""
-    arguments = parse_arguments(arguments)
+    arguments = parse_arguments(cli_args_list)
 
-    with tempfile.TemporaryDirectory() as directory:
+    with tempfile.TemporaryDirectory() as directory_str:
         try:
-            directory = Path(directory)
+            directory = Path(directory_str)
             mappings = make_sketch(directory)
             compile_output = compile_sketch(arguments.board, directory)
 
