@@ -1,0 +1,74 @@
+# This file exists so you can easily regenerate your project.
+#
+# `cookiepatcher` is a convenient shim around `cookiecutter`
+# for regenerating projects (it will generate a .cookiecutterrc
+# automatically for any template). To use it:
+#
+#    pip install cookiepatcher
+#    cookiepatcher gh:ionelmc/cookiecutter-pylibrary arduino-cli-cmake-wrapper
+#
+# See:
+#    https://pypi.org/project/cookiepatcher
+#
+# Alternatively, you can run:
+#
+#    cookiecutter --overwrite-if-exists --config-file=arduino-cli-cmake-wrapper/.cookiecutterrc gh:ionelmc/cookiecutter-pylibrary
+
+default_context:
+
+    _extensions:               ['jinja2_time.TimeExtension']
+    _template:                 'gh:ionelmc/cookiecutter-pylibrary'
+    allow_tests_inside_package: 'no'
+    appveyor:                  'no'
+    c_extension_function:      'longest'
+    c_extension_module:        '_arduino_cli_cmake_wrapper'
+    c_extension_optional:      'no'
+    c_extension_support:       'no'
+    c_extension_test_pypi:     'no'
+    c_extension_test_pypi_username: 'SterlingPeet'
+    codacy:                    'no'
+    codacy_projectid:          '[Get ID from https://app.codacy.com/gh/SterlingPeet/arduino-cli-cmake-wrapper/settings]'
+    codeclimate:               'no'
+    codecov:                   'no'
+    command_line_interface:    'argparse'
+    command_line_interface_bin_name: 'arduino-cli-wrapper'
+    coveralls:                 'no'
+    distribution_name:         'arduino-cli-cmake-wrapper'
+    email:                     'sterling.peet@ae.gatech.edu'
+    full_name:                 'Sterling Lewis Peet'
+    github_actions:            'yes'
+    github_actions_osx:        'yes'
+    github_actions_windows:    'yes'
+    legacy_python:             'no'
+    license:                   'Apache Software License 2.0'
+    linter:                    'flake8'
+    package_name:              'arduino_cli_cmake_wrapper'
+    pre_commit:                'yes'
+    pre_commit_formatter:      'black'
+    project_name:              'Arduino CLI Wrapper for CMake'
+    project_short_description: 'Arduino Cmake toolchain leveraging ``arduino-cli`` via python wrapper script'
+    pypi_badge:                'yes'
+    pypi_disable_upload:       'no'
+    release_date:              'today'
+    repo_hosting:              'github.com'
+    repo_hosting_domain:       'github.com'
+    repo_main_branch:          'main'
+    repo_name:                 'arduino-cli-cmake-wrapper'
+    repo_username:             'SterlingPeet'
+    requiresio:                'no'
+    scrutinizer:               'no'
+    setup_py_uses_pytest_runner: 'no'
+    setup_py_uses_setuptools_scm: 'no'
+    sphinx_docs:               'yes'
+    sphinx_docs_hosting:       'https://arduino-cli-cmake-wrapper.readthedocs.io/'
+    sphinx_doctest:            'no'
+    sphinx_theme:              'sphinx-rtd-theme'
+    test_matrix_configurator:  'no'
+    test_matrix_separate_coverage: 'no'
+    travis:                    'no'
+    travis_osx:                'no'
+    version:                   '0.0.0'
+    version_manager:           'bump2version'
+    website:                   'https://github.com/SterlingPeet'
+    year_from:                 '2022'
+    year_to:                   '2022'
