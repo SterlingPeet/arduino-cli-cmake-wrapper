@@ -16,8 +16,6 @@
 
 default_context:
 
-    _extensions:               ['jinja2_time.TimeExtension']
-    _template:                 'gh:ionelmc/cookiecutter-pylibrary'
     allow_tests_inside_package: 'no'
     appveyor:                  'no'
     c_extension_function:      'longest'
@@ -39,7 +37,6 @@ default_context:
     github_actions:            'yes'
     github_actions_osx:        'yes'
     github_actions_windows:    'yes'
-    legacy_python:             'no'
     license:                   'Apache Software License 2.0'
     linter:                    'flake8'
     package_name:              'arduino_cli_cmake_wrapper'
