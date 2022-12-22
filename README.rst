@@ -8,9 +8,9 @@
     :stub-columns: 1
 
     * - 🔨 Code
-      - | |black| |isort| |contributors| |commit| |license|
+      - | |black| |isort| |contributors| |commit| |license| |semver|
     * - 📝 Docs
-      - | |gitmoji| |docs| |docformatter| |docstyle| |gitchangelog|
+      - | |gitmoji| |docs| |docformatter| |mypy| |docstyle| |gitchangelog|
     * - 🧪 Tests
       - | |github-actions| |pre-commit|
     * - 📦️ Package
@@ -36,6 +36,10 @@
     :target: https://opensource.org/licenses/Apache-2.0
     :alt: Apache Software License 2.0
 
+.. |semver| image:: https://img.shields.io/badge/Semantic%20Versioning-2.0.0-brightgreen.svg?style=flat
+    :target: https://semver.org/
+    :alt: Semantic Versioning - 2.0.0
+
 .. |gitmoji| image:: https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg
     :target: https://github.com/carloscuesta/gitmoji
     :alt: Gitmoji Commit Messages
@@ -47,6 +51,10 @@
 .. |docformatter| image:: https://img.shields.io/badge/%20formatter-docformatter-fedcba.svg
     :target: https://github.com/PyCQA/docformatter
     :alt: Docformatter
+
+.. |mypy| image:: https://img.shields.io/badge/types-Mypy-blue.svg
+    :target: https://github.com/python/mypy
+    :alt: Mypy
 
 .. |docstyle| image:: https://img.shields.io/badge/%20style-google-3666d6.svg
     :target: https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings
