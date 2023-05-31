@@ -192,11 +192,11 @@ def link_tokens(stages: Dict[Stage, List[str]], sources: Dict[Source, Path]) -> 
         """ Cleans out -c -o <arg> and filename arguments """
         return filter_by_filenames(object_names, filter_by_flags({"-o": True}, items))
 
-    link_sorter = partial(filter_by_filenames, [r"\.o$", r"\.a$"])
+    link_sorter = partial(filter_by_filenames, [r"\.o$", r"\.a$", r"^-l", "--start-group$", "--end-group$"])
     linker, link_flags, linkables = sort_line(link_line, cleaner, link_sorter)
 
     link_objects = filter_by_filenames([r"\.o$"], linkables, negate=True)
-    link_libraries = filter_by_filenames([r"\.a$"], linkables, negate=True)
+    link_libraries = filter_by_filenames([r"\.a$", r"^-l", "--start-group$", "--end-group$"], linkables, negate=True)
 
     LOGGER.debug(f"Detected linker: %s", linker)
     LOGGER.debug(f"Detected linker flags:\n\t%s", "\n\t".join(link_flags))
