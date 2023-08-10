@@ -1,14 +1,61 @@
 [build-system]
 requires = [
-    "setuptools>=30.3.0",
-    "wheel",
+  "setuptools>=30.3.0",
+  "wheel"
 ]
 
 [tool.black]
 line-length = 79
-target-version = ['py37']
 skip-string-normalization = true
+target-version = ['py37']
 
 [tool.docformatter]
 recursive = true
 wrap-summaries = 95
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff]
+extend-exclude = [".tox", ".eggs", "static", "ci/templates"]
+ignore = [
+  "RUF001",  # ruff-specific rules ambiguous-unicode-character-string
+  "S101",  # flake8-bandit assert
+  "S308",  # flake8-bandit suspicious-mark-safe-usage
+  "E501"  # pycodestyle line-too-long
+]
+line-length = 89
+select = [
+  "B",  # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "DTZ",  # flake8-datetimez
+  "E",  # pycodestyle errors
+  "EXE",  # flake8-executable
+  "F",  # pyflakes
+  "I",  # isort
+  "INT",  # flake8-gettext
+  "PIE",  # flake8-pie
+  "PLC",  # pylint convention
+  "PLE",  # pylint errors
+  "PT",  # flake8-pytest-style
+  "PTH",  # flake8-use-pathlib
+  "Q",  # flake8-quotes
+  "RSE",  # flake8-raise
+  "RUF",  # ruff-specific rules
+  "S",  # flake8-bandit
+  "UP",  # pyupgrade
+  "W"  # pycodestyle warnings
+]
+src = ["src", "tests"]
+target-version = "py38"
+
+[tool.ruff.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "single"
+
+[tool.ruff.isort]
+force-single-line = true
+forced-separate = ["conftest"]
