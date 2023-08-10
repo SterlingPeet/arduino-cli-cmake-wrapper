@@ -8,7 +8,7 @@
     :stub-columns: 1
 
     * - 🔨 Code
-      - | |black| |isort| |contributors| |commit| |license| |semver|
+      - | |black| |isort| |ruff| |contributors| |commit| |license| |semver|
     * - 📝 Docs
       - | |gitmoji| |docs| |docformatter| |mypy| |docstyle| |gitchangelog|
     * - 🧪 Tests
@@ -25,6 +25,10 @@
 .. |isort| image:: https://img.shields.io/badge/%20imports-isort-%231674b1
     :target: https://pycqa.github.io/isort/
     :alt: isort your imports, so you don't have to
+
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json
+    :target: https://github.com/charliermarsh/ruff
+    :alt: An extremely fast Python linter, written in Rust
 
 .. |contributors| image:: https://img.shields.io/github/contributors/SterlingPeet/arduino-cli-cmake-wrapper
     :target: https://github.com/SterlingPeet/arduino-cli-cmake-wrapper/graphs/contributors
