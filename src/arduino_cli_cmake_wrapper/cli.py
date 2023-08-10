@@ -54,7 +54,7 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
         '--debug',
         action='store_true',
         default=False,
-        help='Turn on debugging output'
+        help='Turn on debugging output',
     )
     parser.add_argument(
         '-b',
@@ -126,13 +126,13 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
         '--json-file',
         type=Path,
         default=None,
-        help='Path to JSON file to write. Default: stdout'
+        help='Path to JSON file to write. Default: stdout',
     )
     return parser.parse_args(arguments)
 
 
 def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
-    """ Remap a value with the given string to string transformations
+    """Remap a value with the given string to string transformations
 
     Remaps a value with the input set of string to string mappings. Strings will "replace" the first token with the
     second in-order. Lists remap each child element recursively. Dictionaries remap the key and recursively remap the
@@ -144,14 +144,21 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
     Return:
         remapped value
     """
+
     def remapper(item: str) -> str:
-        """ Function to remap a string using the remaps input """
+        """Function to remap a string using the remaps input"""
+
         def remap_one(accumulation: str, remap: Tuple[str, str]) -> str:
-            """ Remap for a single tuple """
+            """Remap for a single tuple"""
             return accumulation.replace(remap[0], remap[1])
+
         return reduce(remap_one, remaps.items(), f'{item}')
+
     try:
-        return {remapper(key): convert_to_output(value, remaps) for key, value in value.items()}
+        return {
+            remapper(key): convert_to_output(value, remaps)
+            for key, value in value.items()
+        }
     except AttributeError:
         try:
             if isinstance(value, str):
@@ -161,8 +168,13 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
             return remapper(value)
 
 
-def remap_output(data: Dict, output_directory: Path, cache_path: Path, test_files: Dict[Source, Path]) -> Dict:
-    """ Remap output data by setting up remapping dictionary and then calling convert_to_output
+def remap_output(
+    data: Dict,
+    output_directory: Path,
+    cache_path: Path,
+    test_files: Dict[Source, Path],
+) -> Dict:
+    """Remap output data by setting up remapping dictionary and then calling convert_to_output
 
     The given output data is remapped to remove python data types, replace the cache path with the destination output
     directory, and test files to <TARGET...> replacement tags. post-link also remaps output directory with
@@ -182,9 +194,11 @@ def remap_output(data: Dict, output_directory: Path, cache_path: Path, test_file
         'Source.S': 'ASM',
         'Source.INO': 'INO',
         str(cache_path): str(output_directory),
-        str(output_directory / f'{test_files[Source.INO].name}.elf'): '<TARGET_PATH>',
+        str(
+            output_directory / f'{test_files[Source.INO].name}.elf'
+        ): '<TARGET_PATH>',
         str(output_directory / test_files[Source.INO].name): '<TARGET_PATH>',
-        str(test_files[Source.INO].name): '<TARGET_NAME>'
+        str(test_files[Source.INO].name): '<TARGET_NAME>',
     }
 
     # Full data conversion
@@ -192,12 +206,20 @@ def remap_output(data: Dict, output_directory: Path, cache_path: Path, test_file
 
     # Single section conversions
     if 'post' in data:
-        data['post'] = convert_to_output(data['post'], {str(output_directory): '<TARGET_DIRECTORY>'})
+        data['post'] = convert_to_output(
+            data['post'], {str(output_directory): '<TARGET_DIRECTORY>'}
+        )
     return data
 
 
-def assemble_output_data(test_files: dict[Source, Path], stages: Dict[Stage, List[str]], detect: bool, include: bool, post_link: bool) -> Tuple[Dict, Path]:
-    """ Assemble the output data via data mining
+def assemble_output_data(
+    test_files: dict[Source, Path],
+    stages: Dict[Stage, List[str]],
+    detect: bool,
+    include: bool,
+    post_link: bool,
+) -> Tuple[Dict, Path]:
+    """Assemble the output data via data mining
 
     Compiler, link, archival, and post link data is mined. It is then assembled into the output data object based on the
     options specified to control the output data.
@@ -213,14 +235,20 @@ def assemble_output_data(test_files: dict[Source, Path], stages: Dict[Stage, Lis
         assembled data.
     """
     compilers, includes, build_flags = build_tokens(stages, test_files)
-    linker, link_flags, link_objects, link_libraries = link_tokens(stages, test_files)
+    linker, link_flags, link_objects, link_libraries = link_tokens(
+        stages, test_files
+    )
     archiver, archive_flags = archive_tokens(stages)
     post_link_steps = post_link_lines(stages, test_files)
 
     data = {}
     if detect:
         data['tools'] = {**compilers, 'LINKER': linker, 'AR': archiver}
-        data['flags'] = {**build_flags, 'LINKER_EXE': link_flags, 'AR': archive_flags}
+        data['flags'] = {
+            **build_flags,
+            'LINKER_EXE': link_flags,
+            'AR': archive_flags,
+        }
         data['objects'] = link_objects
         data['libraries'] = link_libraries
     if include:
@@ -235,25 +263,39 @@ def main(arguments: List[str] = None):
     try:
         arguments = parse_arguments(arguments)
         output_directory = Path(arguments.output)
-        logging.basicConfig(level=logging.DEBUG) if arguments.debug else logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(
+            level=logging.DEBUG
+        ) if arguments.debug else logging.basicConfig(level=logging.INFO)
 
         # Run the build
-        test_file_map, stdout, stderr = build(arguments.board, arguments.libraries, [])
+        test_file_map, stdout, stderr = build(
+            arguments.board, arguments.libraries, []
+        )
 
         # Parse the output into stages
         stages = parse(stdout)
 
         # Mine the data for various needed properties
         output_data, cache_path = assemble_output_data(
-            test_file_map, stages, arguments.detect_settings, arguments.includes, arguments.post_link
+            test_file_map,
+            stages,
+            arguments.detect_settings,
+            arguments.includes,
+            arguments.post_link,
         )
 
         # Remap the output data
-        output_data = remap_output(output_data, output_directory, cache_path, test_file_map)
+        output_data = remap_output(
+            output_data, output_directory, cache_path, test_file_map
+        )
         output_data['arguments'] = sys.argv[1:]
 
         # Output the data as JSON
-        with (open(arguments.json_file, 'w') if arguments.json_file is not None else sys.stdout) as file_handle:
+        with (
+            open(arguments.json_file, 'w')
+            if arguments.json_file is not None
+            else sys.stdout
+        ) as file_handle:
             json.dump(output_data, file_handle, indent=4)
 
         # Outputs the sketch cache for ingestion into larger build
@@ -263,7 +305,10 @@ def main(arguments: List[str] = None):
             shutil.copytree(cache_path, output_directory)
 
     except Exception as exc:
-        print(f'[ERROR] {exc.__class__.__name__} occurred. {exc}', file=sys.stderr)
+        print(
+            f'[ERROR] {exc.__class__.__name__} occurred. {exc}',
+            file=sys.stderr,
+        )
         raise
         return 1
     return 0

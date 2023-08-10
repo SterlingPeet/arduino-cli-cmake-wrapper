@@ -37,20 +37,25 @@ def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
     """
     libraries = libraries if libraries else []
     mappings = {
-        source: directory / f'{directory.name}.{ source.value }' for source in Source
+        source: directory / f'{directory.name}.{ source.value }'
+        for source in Source
     }
     # Create an empty source of each type
     for _, path in mappings.items():
         path.touch()
     # Create main sketch as an ino file such that it is a valid sketch
     with open(mappings.get(Source.INO), 'w') as file_handle:
-        include_set = '\n'.join(f'#include <{library}.h>' for library in libraries)
+        include_set = '\n'.join(
+            f'#include <{library}.h>' for library in libraries
+        )
         file_handle.write(include_set + '\nvoid setup() {}\nvoid loop() {}')
     return mappings
 
 
-def compile_sketch(board: str, directory: Path, pass_through: Union[List[str], None] = None) -> Tuple[str, str]:
-    """ Compile the sketch to product core and output text.
+def compile_sketch(
+    board: str, directory: Path, pass_through: Union[List[str], None] = None
+) -> Tuple[str, str]:
+    """Compile the sketch to product core and output text.
 
     This will compile a sketch directory and produce the necessary core archive and output text. This runs with the
     --clean flag to prevent cross-talk from any other builds in the form of cached build output. The board to compile
@@ -65,21 +70,31 @@ def compile_sketch(board: str, directory: Path, pass_through: Union[List[str], N
         tuple of raw standard out and standard error of the build
     """
     pass_through = pass_through if pass_through else []
-    arguments = ['arduino-cli', 'compile', '-v', '--clean', '-b', board, *pass_through, str(directory)]
+    arguments = [
+        'arduino-cli',
+        'compile',
+        '-v',
+        '--clean',
+        '-b',
+        board,
+        *pass_through,
+        str(directory),
+    ]
     LOGGER.debug('Invoking: %s', ' '.join(arguments))
 
-    process = subprocess.run(
-        arguments,
-        text=True,
-        capture_output=True
-    )
+    process = subprocess.run(arguments, text=True, capture_output=True)
     if process.returncode != 0:
-        raise FauxBuildException(f'arduino-cli failed with return code: {process.returncode}', process.stderr)
+        raise FauxBuildException(
+            f'arduino-cli failed with return code: {process.returncode}',
+            process.stderr,
+        )
     return process.stdout, process.stderr
 
 
-def build(board: str, libraries: List[str], args: Union[List[str], None] = None) -> Tuple[Dict[Source, Path], str, str]:
-    """ Run the test build and produce the raw build console output
+def build(
+    board: str, libraries: List[str], args: Union[List[str], None] = None
+) -> Tuple[Dict[Source, Path], str, str]:
+    """Run the test build and produce the raw build console output
 
     Runs the arduino build under the given constraints: board type, list of libraries needed from arduino, and the set
     of pass-through arguments to supply directly to the command invocation.
