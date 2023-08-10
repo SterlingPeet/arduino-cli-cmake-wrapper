@@ -4,7 +4,7 @@
 #
 exclude: ^(\.tox|ci|\.bumpversion\.cfg)(/|$)
 default_install_hook_types: [pre-commit, pre-merge-commit, pre-push, commit-msg]
-default_stages: [pre-commit, pre-merge-commit, pre-push, commit-msg]
+default_stages: [pre-commit, pre-merge-commit, pre-push]
 repos:
 - repo: https://github.com/SterlingPeet/git-precommit-hooks
   rev: v1.0.0
