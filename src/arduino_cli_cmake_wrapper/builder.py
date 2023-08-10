@@ -35,15 +35,15 @@ def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
     """
     libraries = libraries if libraries else []
     mappings = {
-        source: directory / f"{directory.name}.{ source.value }" for source in Source
+        source: directory / f'{directory.name}.{ source.value }' for source in Source
     }
     # Create an empty source of each type
     for _, path in mappings.items():
         path.touch()
     # Create main sketch as an ino file such that it is a valid sketch
-    with open(mappings.get(Source.INO), "w") as file_handle:
-        include_set = "\n".join(f"#include <{library}.h>" for library in libraries)
-        file_handle.write(include_set + "\nvoid setup() {}\nvoid loop() {}")
+    with open(mappings.get(Source.INO), 'w') as file_handle:
+        include_set = '\n'.join(f'#include <{library}.h>' for library in libraries)
+        file_handle.write(include_set + '\nvoid setup() {}\nvoid loop() {}')
     return mappings
 
 
@@ -64,14 +64,14 @@ def compile_sketch(board: str, directory: Path, pass_through: Union[List[str], N
     """
     pass_through = pass_through if pass_through else []
     arguments = [
-        "arduino-cli",
-        "compile",
-        "-v",
-        "--clean",
-        "-b",
+        'arduino-cli',
+        'compile',
+        '-v',
+        '--clean',
+        '-b',
         board,
     ] + pass_through + [str(directory)]
-    LOGGER.debug("Invoking: %s", " ".join(arguments))
+    LOGGER.debug('Invoking: %s', ' '.join(arguments))
 
     process = subprocess.run(
         arguments,
@@ -80,7 +80,7 @@ def compile_sketch(board: str, directory: Path, pass_through: Union[List[str], N
         stderr=subprocess.PIPE
     )
     if process.returncode != 0:
-        raise FauxBuildException(f"arduino-cli failed with return code: {process.returncode}", process.stderr)
+        raise FauxBuildException(f'arduino-cli failed with return code: {process.returncode}', process.stderr)
     return process.stdout, process.stderr
 
 

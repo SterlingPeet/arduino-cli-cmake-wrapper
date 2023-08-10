@@ -46,82 +46,82 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser(description=HELP_TEXT)
     parser.add_argument(
-        "--debug",
-        action="store_true",
+        '--debug',
+        action='store_true',
         default=False,
-        help="Turn on debugging output"
+        help='Turn on debugging output'
     )
     parser.add_argument(
-        "-b",
-        "--board",
+        '-b',
+        '--board',
         type=str,
-        help="Target board FQBN supplied to the arduino build",
+        help='Target board FQBN supplied to the arduino build',
         required=True,
     )
     parser.add_argument(
-        "-d",
-        "--detect-settings",
-        action="store_true",
-        help="Tell fprime-arduino to detect build settings",
+        '-d',
+        '--detect-settings',
+        action='store_true',
+        help='Tell fprime-arduino to detect build settings',
         default=False,
     )
     parser.add_argument(
-        "-g",
-        "--generate-code",
-        action="store_true",
-        help="Tell fprime-arduino to build support code",
+        '-g',
+        '--generate-code',
+        action='store_true',
+        help='Tell fprime-arduino to build support code',
         default=False,
     )
     parser.add_argument(
-        "-i",
-        "--includes",
-        action="store_true",
-        help="Tell fprime-arduino to list include directories",
+        '-i',
+        '--includes',
+        action='store_true',
+        help='Tell fprime-arduino to list include directories',
         default=False,
     )
     parser.add_argument(
-        "-l",
-        "--libraries",
+        '-l',
+        '--libraries',
         type=str,
-        nargs="*",
-        help="List of arduino libraries to use (e.g. Wire.h)",
+        nargs='*',
+        help='List of arduino libraries to use (e.g. Wire.h)',
         required=False,
     )
     parser.add_argument(
-        "-c",
-        "--copy",
+        '-c',
+        '--copy',
         type=str,
-        nargs="*",
-        help="List of extra filenames to copy and remap to new directory in generate step",
+        nargs='*',
+        help='List of extra filenames to copy and remap to new directory in generate step',
         required=False,
     )
     parser.add_argument(
-        "--properties",
+        '--properties',
         type=str,
-        nargs="*",
-        help="List of build properties to supply",
+        nargs='*',
+        help='List of build properties to supply',
         required=False,
     )
     parser.add_argument(
-        "-p",
-        "--post-link",
-        action="store_true",
-        help="Generate post link steps",
+        '-p',
+        '--post-link',
+        action='store_true',
+        help='Generate post link steps',
         required=False,
     )
     parser.add_argument(
-        "-o",
-        "--output",
+        '-o',
+        '--output',
         type=Path,
-        help="Output destination for the pre-compiled arduino core",
+        help='Output destination for the pre-compiled arduino core',
         required=True,
     )
     parser.add_argument(
-        "-j",
-        "--json-file",
+        '-j',
+        '--json-file',
         type=Path,
         default=None,
-        help="Path to JSON file to write. Default: stdout"
+        help='Path to JSON file to write. Default: stdout'
     )
     return parser.parse_args(arguments)
 
@@ -144,7 +144,7 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
         def remap_one(accumulation: str, remap: Tuple[str, str]) -> str:
             """ Remap for a single tuple """
             return accumulation.replace(remap[0], remap[1])
-        return reduce(remap_one, remaps.items(), f"{item}")
+        return reduce(remap_one, remaps.items(), f'{item}')
     try:
         return {remapper(key): convert_to_output(value, remaps) for key, value in value.items()}
     except AttributeError:
@@ -172,22 +172,22 @@ def remap_output(data: Dict, output_directory: Path, cache_path: Path, test_file
         remapped data
     """
     mappings = {
-        "Source.CPP": "CXX",
-        "Source.C": "C",
-        "Source.S": "ASM",
-        "Source.INO": "INO",
+        'Source.CPP': 'CXX',
+        'Source.C': 'C',
+        'Source.S': 'ASM',
+        'Source.INO': 'INO',
         str(cache_path): str(output_directory),
-        str(output_directory / f"{test_files[Source.INO].name}.elf"): "<TARGET_PATH>",
-        str(output_directory / test_files[Source.INO].name): "<TARGET_PATH>",
-        str(test_files[Source.INO].name): "<TARGET_NAME>"
+        str(output_directory / f'{test_files[Source.INO].name}.elf'): '<TARGET_PATH>',
+        str(output_directory / test_files[Source.INO].name): '<TARGET_PATH>',
+        str(test_files[Source.INO].name): '<TARGET_NAME>'
     }
 
     # Full data conversion
     data = convert_to_output(data, mappings)
 
     # Single section conversions
-    if "post" in data:
-        data["post"] = convert_to_output(data["post"], {str(output_directory): "<TARGET_DIRECTORY>"})
+    if 'post' in data:
+        data['post'] = convert_to_output(data['post'], {str(output_directory): '<TARGET_DIRECTORY>'})
     return data
 
 
@@ -214,14 +214,14 @@ def assemble_output_data(test_files: dict[Source, Path], stages: Dict[Stage, Lis
 
     data = {}
     if detect:
-        data["tools"] = {**compilers, "LINKER": linker, "AR": archiver}
-        data["flags"] = {**build_flags, "LINKER_EXE": link_flags, "AR": archive_flags}
-        data["objects"] = link_objects
-        data["libraries"] = link_libraries
+        data['tools'] = {**compilers, 'LINKER': linker, 'AR': archiver}
+        data['flags'] = {**build_flags, 'LINKER_EXE': link_flags, 'AR': archive_flags}
+        data['objects'] = link_objects
+        data['libraries'] = link_libraries
     if include:
-        data["includes"] = includes
+        data['includes'] = includes
     if post_link:
-        data["post"] = post_link_steps
+        data['post'] = post_link_steps
     return data, sketch_cache(stages)
 
 
@@ -245,10 +245,10 @@ def main(arguments: List[str] = None):
 
         # Remap the output data
         output_data = remap_output(output_data, output_directory, cache_path, test_file_map)
-        output_data["arguments"] = sys.argv[1:]
+        output_data['arguments'] = sys.argv[1:]
 
         # Output the data as JSON
-        with (open(arguments.json_file, "w") if arguments.json_file is not None else sys.stdout) as file_handle:
+        with (open(arguments.json_file, 'w') if arguments.json_file is not None else sys.stdout) as file_handle:
             json.dump(output_data, file_handle, indent=4)
 
         # Outputs the sketch cache for ingestion into larger build
@@ -258,7 +258,7 @@ def main(arguments: List[str] = None):
             shutil.copytree(cache_path, output_directory)
 
     except Exception as exc:
-        print(f"[ERROR] {exc.__class__.__name__} occurred. {exc}", file=sys.stderr)
+        print(f'[ERROR] {exc.__class__.__name__} occurred. {exc}', file=sys.stderr)
         raise
         return 1
     return 0

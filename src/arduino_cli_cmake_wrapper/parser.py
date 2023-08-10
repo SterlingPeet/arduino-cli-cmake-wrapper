@@ -21,12 +21,12 @@ LOGGER = logging.getLogger(__name__)
 
 
 ANNOTATION_MAP = {
-    "Detecting libraries used...": Stage.LIBRARY_DETECTION,
-    "Generating function prototypes...": Stage.PROTOTYPES,
-    "Compiling sketch...": Stage.COMPILATION,
-    "Compiling libraries...": Stage.LIBRARIES,
-    "Compiling core...": Stage.CORE,
-    "Linking everything together...": Stage.LINK,
+    'Detecting libraries used...': Stage.LIBRARY_DETECTION,
+    'Generating function prototypes...': Stage.PROTOTYPES,
+    'Compiling sketch...': Stage.COMPILATION,
+    'Compiling libraries...': Stage.LIBRARIES,
+    'Compiling core...': Stage.CORE,
+    'Linking everything together...': Stage.LINK,
 }
 
 
@@ -43,8 +43,8 @@ def sectioner(stdout: str) -> List[Tuple[str, List[str]]]:
     Returns:
         list of (announcement, section lines) tuples containing the in-order build section output
     """
-    lines = [line.strip() for line in stdout.split("\n")]
-    titles = filter(lambda enumeration: enumeration[1].endswith("..."), enumerate(lines))
+    lines = [line.strip() for line in stdout.split('\n')]
+    titles = filter(lambda enumeration: enumeration[1].endswith('...'), enumerate(lines))
     enumerated_titles = list(enumerate(titles))
     indexed_titles = [
         (title, start, dict(enumerated_titles).get(index + 1, (-1,))[0])
@@ -116,7 +116,7 @@ def parse(stdout: str) -> Dict[Stage, List[str]]:
         if stage == Stage.UNKNOWN
     ]
     if unknown_titles:
-        LOGGER.warning("Unknown sections detected with titles: %s", ",".join(unknown_titles))
+        LOGGER.warning('Unknown sections detected with titles: %s', ','.join(unknown_titles))
     build_stages = {stage: lines for stage, lines in annotated}
-    LOGGER.debug("Detected build stages:\n\t%s", string_dictionary_of_list(build_stages))
+    LOGGER.debug('Detected build stages:\n\t%s', string_dictionary_of_list(build_stages))
     return build_stages
