@@ -1,19 +1,21 @@
 [general]
-ignore=B6
+# Don't actually fail on title-only commit messages
+ignore = B6
+regex-style-search = True
 
 # verbosity should be a value between 1 and 3, the commandline -v flags take precedence over this
-# verbosity = 2
+# verbosity = 3
 
 [title-max-length]
-line-length=100
+line-length = 100
 
 [title-match-regex]
 # This requires the title to start with a Gitmoji
-regex=^(🎨|⚡️|🔥|🐛|🚑️|✨|📝|🚀|💄|🎉|✅|🔒️|🔐|🔖|🚨|🚧|💚|⬇️|⬆️|📌|👷|📈|♻️|➕|➖|🔧|🔨|🌐|✏️|💩|⏪️|🔀|📦️|👽️|🚚|📄|💥|🍱|♿️|💡|🍻|💬|🗃️|🔊|🔇|👥|🚸|🏗️|📱|🤡|🥚|🙈|📸|⚗️|🔍️|🏷️|🌱|🚩|🥅|💫|🗑️|🛂|🩹|🧐|⚰️|🧪|👔|🩺|🧱|🧑‍💻|💸|🧵|🦺) \w
+regex = ^(🎨|⚡️|🔥|🐛|🚑️|✨|📝|🚀|💄|🎉|✅|🔒️|🔐|🔖|🚨|🚧|💚|⬇️|⬆️|📌|👷|📈|♻️|➕|➖|🔧|🔨|🌐|✏️|💩|⏪️|🔀|📦️|👽️|🚚|📄|💥|🍱|♿️|💡|🍻|💬|🗃️|🔊|🔇|👥|🚸|🏗️|📱|🤡|🥚|🙈|📸|⚗️|🔍️|🏷️|🌱|🚩|🥅|💫|🗑️|🛂|🩹|🧐|⚰️|🧪|👔|🩺|🧱|🧑‍💻|💸|🧵|🦺) \w
 
 [body-max-line-length]
-line-length=72
+line-length = 72
 
 [ignore-by-title]
 # Ignore certain rules for commits of which the title matches a regex
-regex=^🚧 WIP(.*)
+regex = ^🚧 WIP(.*)
