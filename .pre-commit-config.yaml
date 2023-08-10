@@ -11,7 +11,7 @@ repos:
   hooks:
   - id: check-git-hooks-installed
     stages: [pre-commit, pre-merge-commit, pre-push, commit-msg]
-    args: [--hook, 'pre-commit,commit-msg,pre-push']
+    args: [--hook, 'pre-commit,pre-merge-commit,pre-push,commit-msg']
 - repo: https://github.com/jorisroovers/gitlint
   rev: v0.19.1
   hooks:
