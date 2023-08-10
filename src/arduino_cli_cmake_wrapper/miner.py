@@ -5,11 +5,22 @@ Handles the data mining operations on the output of the build stages.
 import logging
 from functools import partial
 from pathlib import Path
-from typing import Callable, Dict, List, Protocol, Tuple, Union
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Tuple
+from typing import Union
 
-from .types import FilterProtocol, Source, Stage, MissingStageException, MultipleInvocationException, ArduinoCLIException
-from .util import safe_split, string_dictionary_of_list, match_any, match_all
-
+from .types import ArduinoCLIException
+from .types import FilterProtocol
+from .types import MissingStageException
+from .types import MultipleInvocationException
+from .types import Source
+from .types import Stage
+from .util import match_all
+from .util import match_any
+from .util import safe_split
+from .util import string_dictionary_of_list
 
 LOGGER = logging.getLogger(__name__)
 
@@ -114,9 +125,9 @@ def build_tokens(stages: Dict[Stage, List[str]], sources: Dict[Source, Path]) ->
         source: [path.replace('-I', '') for path in sorted_source_lines[source][2] if path != '-I']
         for source in Source
     }
-    LOGGER.debug(f'Detected compilers:\n\t%s', '\n\t'.join([f'{source}: {value}' for source, value in tools.items()]))
-    LOGGER.debug(f'Detected include paths:%s', string_dictionary_of_list(include_paths))
-    LOGGER.debug(f'Detected build flags:%s', string_dictionary_of_list(non_include_paths))
+    LOGGER.debug('Detected compilers:\n\t%s', '\n\t'.join([f'{source}: {value}' for source, value in tools.items()]))
+    LOGGER.debug('Detected include paths:%s', string_dictionary_of_list(include_paths))
+    LOGGER.debug('Detected build flags:%s', string_dictionary_of_list(non_include_paths))
 
     return tools, include_paths, non_include_paths
 
@@ -151,7 +162,7 @@ def identify_line(stage: Stage, stages: Dict[Stage, List[str]], match: Callable[
         raise MissingStageException(stage)
     if single and len(matching_lines) > 1:
         print('\n'.join(matching_lines))
-        raise MultipleInvocationException()
+        raise MultipleInvocationException
     return matching_lines[0]
 
 
@@ -198,10 +209,10 @@ def link_tokens(stages: Dict[Stage, List[str]], sources: Dict[Source, Path]) -> 
     link_objects = filter_by_filenames([r'\.o$'], linkables, negate=True)
     link_libraries = filter_by_filenames([r'\.a$', r'^-l', '--start-group$', '--end-group$'], linkables, negate=True)
 
-    LOGGER.debug(f'Detected linker: %s', linker)
-    LOGGER.debug(f'Detected linker flags:\n\t%s', '\n\t'.join(link_flags))
-    LOGGER.debug(f'Detected link libraries:\n\t%s', '\n\t'.join(link_libraries))
-    LOGGER.debug(f'Detected link objects:\n\t%s', '\n\t'.join(link_objects))
+    LOGGER.debug('Detected linker: %s', linker)
+    LOGGER.debug('Detected linker flags:\n\t%s', '\n\t'.join(link_flags))
+    LOGGER.debug('Detected link libraries:\n\t%s', '\n\t'.join(link_libraries))
+    LOGGER.debug('Detected link objects:\n\t%s', '\n\t'.join(link_objects))
     return linker, link_flags, link_objects, link_libraries
 
 
@@ -211,8 +222,8 @@ def archive_tokens(stages: Dict[Stage, List[str]]) -> Tuple[str, List[str]]:
     archiver, archive_flags, _ = sort_line(archive_line, archive_cleaner)
     assert _ == [], 'Sort list not empty'
 
-    LOGGER.debug(f'Detected archive tool: %s', archiver)
-    LOGGER.debug(f'Detected archive flags:\n\t%s', '\n\t'.join(archive_flags))
+    LOGGER.debug('Detected archive tool: %s', archiver)
+    LOGGER.debug('Detected archive flags:\n\t%s', '\n\t'.join(archive_flags))
     return archiver, archive_flags
 
 
@@ -223,5 +234,5 @@ def post_link_lines(stages: Dict[Stage, List[str]], sources: Dict[Source, Path])
     stage_lines = stages.get(Stage.LINK, [])
     post_links = stage_lines[stage_lines.index(link_line) + 1:]
 
-    LOGGER.debug(f'Post link steps:\n\t%s', '\n\t'.join(post_links))
+    LOGGER.debug('Post link steps:\n\t%s', '\n\t'.join(post_links))
     return post_links

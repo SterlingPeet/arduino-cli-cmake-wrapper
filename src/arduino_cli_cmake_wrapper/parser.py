@@ -11,11 +11,13 @@ external application. This parsing is three steps:
 """
 import logging
 from shutil import which
-from typing import Dict, List, Tuple
+from typing import Dict
+from typing import List
+from typing import Tuple
 
-from .util import safe_split, string_dictionary_of_list
 from .types import Stage
-
+from .util import safe_split
+from .util import string_dictionary_of_list
 
 LOGGER = logging.getLogger(__name__)
 
@@ -117,6 +119,6 @@ def parse(stdout: str) -> Dict[Stage, List[str]]:
     ]
     if unknown_titles:
         LOGGER.warning('Unknown sections detected with titles: %s', ','.join(unknown_titles))
-    build_stages = {stage: lines for stage, lines in annotated}
+    build_stages = dict(annotated)
     LOGGER.debug('Detected build stages:\n\t%s', string_dictionary_of_list(build_stages))
     return build_stages

@@ -1,7 +1,10 @@
 """ Types and definitions for the arduino-cli-wrapper application """
 
-from enum import Enum, auto
-from typing import List, Protocol
+from enum import Enum
+from enum import auto
+from typing import List
+from typing import Protocol
+
 
 class Source(Enum):
     """ Enumeration of the source file types """
@@ -35,7 +38,6 @@ class FilterProtocol(Protocol):
 
 class ArduinoCLIException(Exception):
     """ Base for arduino-cli exceptions"""
-    pass
 
 
 class FauxBuildException(ArduinoCLIException):
@@ -74,4 +76,4 @@ class MultipleInvocationException(ArduinoCLIException):
     """ Invocation on command-line was found multiple times """
     def __init__(self):
         """ Construct based on missing source """
-        super().__init__(f'Found multiple invocations')
+        super().__init__('Found multiple invocations')

@@ -1,9 +1,12 @@
 """ Utility functions for the Arudino wrapper """
 import re
 import shlex
-from pathlib import Path
-from typing import Any, List, Dict, Iterable
 from functools import reduce
+from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import Iterable
+from typing import List
 
 
 def match_any(matches: Iterable[str], item: str) -> bool:
@@ -58,5 +61,5 @@ def prefixed_join(join_string: str, lines: List[str]) -> str:
 
 def string_dictionary_of_list(mapping: Dict[Any, List[str]], base_indent=1):
     """ Print the build sections to standard output """
-    joiner = f'\n' + ('\t' * base_indent)
+    joiner = '\n' + ('\t' * base_indent)
     return prefixed_join(joiner, [f'{key}' + prefixed_join(joiner + '\t', lines) for key, lines in mapping.items()])

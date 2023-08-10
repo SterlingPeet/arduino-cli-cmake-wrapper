@@ -8,13 +8,15 @@ capturing output from that build.
 """
 import logging
 import subprocess
-
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Dict, List, Tuple, Union
+from typing import Dict
+from typing import List
+from typing import Tuple
+from typing import Union
 
-from .types import Source, FauxBuildException
-
+from .types import FauxBuildException
+from .types import Source
 
 LOGGER = logging.getLogger(__name__)
 
@@ -63,21 +65,13 @@ def compile_sketch(board: str, directory: Path, pass_through: Union[List[str], N
         tuple of raw standard out and standard error of the build
     """
     pass_through = pass_through if pass_through else []
-    arguments = [
-        'arduino-cli',
-        'compile',
-        '-v',
-        '--clean',
-        '-b',
-        board,
-    ] + pass_through + [str(directory)]
+    arguments = ['arduino-cli', 'compile', '-v', '--clean', '-b', board, *pass_through, str(directory)]
     LOGGER.debug('Invoking: %s', ' '.join(arguments))
 
     process = subprocess.run(
         arguments,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        capture_output=True
     )
     if process.returncode != 0:
         raise FauxBuildException(f'arduino-cli failed with return code: {process.returncode}', process.stderr)

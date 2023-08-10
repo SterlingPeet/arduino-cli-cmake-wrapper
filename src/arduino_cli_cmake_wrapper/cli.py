@@ -6,22 +6,27 @@ This allows the program to know how arduino should compile C and C++
 files.
 """
 import argparse
+import json
+import logging
 import shutil
 import sys
+from functools import reduce
 from pathlib import Path
+from typing import Any
+from typing import Dict
 from typing import List
 from typing import Optional
-
-import logging
-import json
-from functools import reduce
-from typing import Any, Dict, Tuple
-
+from typing import Tuple
 
 from .builder import build
+from .miner import archive_tokens
+from .miner import build_tokens
+from .miner import link_tokens
+from .miner import post_link_lines
+from .miner import sketch_cache
 from .parser import parse
-from .miner import build_tokens, sketch_cache, link_tokens, post_link_lines, archive_tokens
-from .types import Source, Stage
+from .types import Source
+from .types import Stage
 
 HELP_TEXT = """Tool used to parse settings from a compilation run of Arduino CLI.
 
