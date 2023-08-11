@@ -1,8 +1,9 @@
 """Handles the setup and build of the arduino-cli test build.
 
-The core of the arduino-cli-wrapper runs arduino-cli with a test build and mines the output for the necessary build
-steps for compiling Arduino programs generically. This module contains the functions for setting-up, running, and
-capturing output from that build.
+The core of the arduino-cli-wrapper runs arduino-cli with a test build
+and mines the output for the necessary build steps for compiling Arduino
+programs generically. This module contains the functions for setting-up,
+running, and capturing output from that build.
 
 @author lestarch
 """
@@ -24,9 +25,11 @@ LOGGER = logging.getLogger(__name__)
 def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
     """Create a sketch folder with at least a C, C++, and assembly file.
 
-    Arduino must compile sketches and in order to determine the necessary compilation information we must create a
-    sketch that uses each of these constructs for compilation. This function will generate a sketch using these
-    constructs and return the mapping of the type extension (c, cpp, S) to the path to that created file
+    Arduino must compile sketches and in order to determine the
+    necessary compilation information we must create a sketch that uses
+    each of these constructs for compilation. This function will
+    generate a sketch using these constructs and return the mapping of
+    the type extension (c, cpp, S) to the path to that created file
 
     Args:
         directory: directory to create the sketch within
@@ -57,10 +60,12 @@ def compile_sketch(
 ) -> Tuple[str, str]:
     """Compile the sketch to product core and output text.
 
-    This will compile a sketch directory and produce the necessary core archive and output text. This runs with the
-    --clean flag to prevent cross-talk from any other builds in the form of cached build output. The board to compile
-    against is passed in along with the directory containing the sketch. In order to produce all necessary information
-    this command is run in verbose mode.
+    This will compile a sketch directory and produce the necessary core
+    archive and output text. This runs with the ``--clean`` flag to
+    prevent cross-talk from any other builds in the form of cached build
+    output. The board to compile against is passed in along with the
+    directory containing the sketch. In order to produce all necessary
+    information this command is run in verbose mode.
 
     Args:
         directory: sketch directory to compile
@@ -96,8 +101,9 @@ def build(
 ) -> Tuple[Dict[Source, Path], str, str]:
     """Run the test build and produce the raw build console output.
 
-    Runs the arduino build under the given constraints: board type, list of libraries needed from arduino, and the set
-    of pass-through arguments to supply directly to the command invocation.
+    Runs the arduino build under the given constraints: board type, list
+    of libraries needed from arduino, and the set of pass-through
+    arguments to supply directly to the command invocation.
 
     Args:
         board: compile board target FQBN

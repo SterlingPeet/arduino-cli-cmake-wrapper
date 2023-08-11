@@ -38,9 +38,11 @@ def filter_by_flags(
 ) -> List[str]:
     """Filter a set of tokens based on a set of flags.
 
-    Reduce the set of tokens to ensure that it does not include any of the matching flags, unless negate is specified
-    then only the matching flags are exposed. Tokens is a list of tokens, and flags is a dictionary of the flag (e.g.
-    -c) to a boolean indicating if the flag takes an argument.
+    Reduce the set of tokens to ensure that it does not include any of
+    the matching flags, unless negate is specified then only the
+    matching flags are exposed. Tokens is a list of tokens, and flags is
+    a dictionary of the flag (e.g. -c) to a boolean indicating if the
+    flag takes an argument.
 
     Args:
         flags: flag to argument boolean dictionary
@@ -77,8 +79,9 @@ def filter_by_filenames(
 ) -> List[str]:
     """Filter a set of tokens based on a set of filenames.
 
-    Filter a list of tokens by a list of filenames. In normal operation these filenames are removed. If negate is
-    specified then only those tokens are kept.
+    Filter a list of tokens by a list of filenames. In normal operation
+    these filenames are removed. If negate is specified then only those
+    tokens are kept.
 
     Args:
         filenames: flag to argument boolean dictionary
@@ -105,10 +108,13 @@ def build_tokens(
 ]:
     """Detect command line build tokens for each source type.
 
-    Looks at the source build invocation for each file in the source mapping, and determines the command line arguments
-    used for the build of that source file. The <source file>, <source_file>.o and -o flag proceeding the .o are all
-    removed as these depend on the name of the source. The resulting tokens are split into three values: tool used for
-    compiling the source, build tokens, and include directories. These are each indexed by source type.
+    Looks at the source build invocation for each file in the source
+    mapping, and determines the command line arguments used for the
+    build of that source file. The <source file>, <source_file>.o and -o
+    flag proceeding the .o are all removed as these depend on the name
+    of the source. The resulting tokens are split into three values:
+    tool used for compiling the source, build tokens, and include
+    directories. These are each indexed by source type.
 
     Args:
         stages: parsed and annotated build information
@@ -169,8 +175,9 @@ def build_tokens(
 def sketch_cache(stages: Dict[Stage, List[str]]) -> Path:
     """Detect the sketch cache Arduino uses.
 
-    Detects the cache used by Arduino for compiling the core, generating precompiled headers, and other scratch work
-    that this tool can borrow as output.
+    Detects the cache used by Arduino for compiling the core, generating
+    precompiled headers, and other scratch work that this tool can
+    borrow as output.
 
     Args:
         stages: stages of the build output

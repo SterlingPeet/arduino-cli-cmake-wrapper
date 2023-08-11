@@ -134,9 +134,10 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
 def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
     """Remap a value with the given string to string transformations.
 
-    Remaps a value with the input set of string to string mappings. Strings will "replace" the first token with the
-    second in-order. Lists remap each child element recursively. Dictionaries remap the key and recursively remap the
-    child values.
+    Remaps a value with the input set of string to string mappings.
+    Strings will "replace" the first token with the second in-order.
+    Lists remap each child element recursively. Dictionaries remap the
+    key and recursively remap the child values.
 
     Args:
         value: value to remap, works best if a string, list, or dictionary
@@ -176,9 +177,10 @@ def remap_output(
 ) -> Dict:
     """Remap output data by setting up remapping dictionary and then calling convert_to_output.
 
-    The given output data is remapped to remove python data types, replace the cache path with the destination output
-    directory, and test files to <TARGET...> replacement tags. post-link also remaps output directory with
-    <TARGET_DIRECTORY>.
+    The given output data is remapped to remove python data types,
+    replace the cache path with the destination output directory, and
+    test files to <TARGET...> replacement tags. post-link also remaps
+    output directory with <TARGET_DIRECTORY>.
 
     Args:
         data: data to remap
@@ -221,8 +223,9 @@ def assemble_output_data(
 ) -> Tuple[Dict, Path]:
     """Assemble the output data via data mining.
 
-    Compiler, link, archival, and post link data is mined. It is then assembled into the output data object based on the
-    options specified to control the output data.
+    Compiler, link, archival, and post link data is mined. It is then
+    assembled into the output data object based on the options specified
+    to control the output data.
 
     Args:
         test_files: source to file used to compile test

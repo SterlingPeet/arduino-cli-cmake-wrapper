@@ -14,8 +14,8 @@ to compile a normal Arduino project from the command line, skip this
 project and CMake altogether and just use the ``arduino-cli`` as
 intended.
 
-On the other hand, if you are trying to use a CMake-bound project as
-the primary development process, you need a way to extract the working
+On the other hand, if you are trying to use a CMake-bound project as the
+primary development process, you need a way to extract the working
 compile process from the Arduino IDE and reformat it into a CMake
 Toolchain.
 

@@ -42,9 +42,11 @@ def get_path_from_flag(item: str) -> Path:
 def safe_split(line: str, ignore_errors: bool = False) -> List[str]:
     """Split a line based on shell rules in a verbose manner.
 
-    Shell rules split based on spaces, quotes, etc. This function will attempt to split the line based on these rules,
-    and reports an error with the failing line's text should an error occur.  If ignore_errors is True, an empty list is
-    returned such that is can be called safely when errors are otherwise handled.
+    Shell rules split based on spaces, quotes, etc. This function will
+    attempt to split the line based on these rules, and reports an error
+    with the failing line's text should an error occur.  If
+    ignore_errors is True, an empty list is returned such that is can be
+    called safely when errors are otherwise handled.
 
     Args:
         line: line to split into shell tokens
