@@ -63,7 +63,7 @@ def sectioner(stdout: str) -> List[Tuple[str, List[str]]]:
 
 
 def invocation_filter(lines: List[str]) -> List[str]:
-    """Filters the lines to direct invocations.
+    """Filter the lines to direct invocations.
 
     arduino-cli records invocations of tools, but also reports standard
     output of those tools. This filter reduces the set of output lines
@@ -107,7 +107,7 @@ def annotate(
 
 
 def parse(stdout: str) -> Dict[Stage, List[str]]:
-    """Parses the standard output of the arduino build into annotated sections.
+    """Parse the standard output of the arduino build into annotated sections.
 
     Parse the standard output the arduino-cli into sections. These
     sections are then annotated with the section's role in the build

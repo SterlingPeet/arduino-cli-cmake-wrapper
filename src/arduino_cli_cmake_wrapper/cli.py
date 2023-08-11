@@ -147,7 +147,7 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
     """
 
     def remapper(item: str) -> str:
-        """Function to remap a string using the remaps input."""
+        """Remap a string using the remap input."""
 
         def remap_one(accumulation: str, remap: Tuple[str, str]) -> str:
             """Remap for a single tuple."""

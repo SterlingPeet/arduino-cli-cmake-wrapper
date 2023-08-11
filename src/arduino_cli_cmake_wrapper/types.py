@@ -31,11 +31,12 @@ class FilterProtocol(Protocol):
     """Specifies the contract of the methods running filtering."""
 
     def __call__(self, tokens: List[str], negate: bool = False) -> List[str]:
+        """Apply the filtering protocol on the provided tokens."""
         pass
 
     @staticmethod
     def pass_all(tokens: List[str], negate: bool = False):
-        """Default implementation: pass-all filter."""
+        """Pass all tokens through the filter (default)."""
         return [] if negate else tokens
 
 

@@ -10,7 +10,7 @@ from typing import List
 
 
 def match_any(matches: Iterable[str], item: str) -> bool:
-    """True iff item matches anything in the list."""
+    """Return true iff item matches anything in the list."""
     matchers = [re.compile(pattern) for pattern in matches]
     return reduce(
         lambda accum, potential: accum or potential.search(item),
@@ -20,7 +20,7 @@ def match_any(matches: Iterable[str], item: str) -> bool:
 
 
 def match_all(matches: Iterable[str], item: str) -> bool:
-    """True iff item matches all items in the list."""
+    """Return true iff item matches all items in the list."""
     matchers = [re.compile(pattern) for pattern in matches]
     return reduce(
         lambda accum, potential: accum and potential.search(item),

@@ -54,7 +54,7 @@ def filter_by_flags(
     """
 
     def filterer(token: str, previous: Union[None, str]):
-        """Filtering function taking current and previous token."""
+        """Filter function taking current and previous token."""
         value = match_any(flags.keys(), token[:2])
         value = value or match_any(
             [
@@ -93,7 +93,7 @@ def filter_by_filenames(
     """
 
     def filterer(item: str):
-        """Filterer that can also negate."""
+        """Filter that can also negate."""
         value = match_any(filenames, item)
         return not value if negate else value
 
@@ -134,7 +134,7 @@ def build_tokens(
     }
 
     def cleaner(items: List[str]) -> List[str]:
-        """Cleans out -c -o <arg> and filename arguments."""
+        """Clean out -c -o <arg> and filename arguments."""
         return filter_by_filenames(
             list(real_names.values()),
             filter_by_flags({'-c': False, '-o': True}, items),
@@ -206,6 +206,21 @@ def identify_line(
     match: Callable[[str], bool],
     single: bool = True,
 ) -> str:
+    """Identify a line based on the given stage and criteria.
+
+    Args:
+    - stage: The current stage to identify lines for.
+    - stages: A dictionary mapping stages to lists of lines.
+    - match: A function that checks if a line matches a certain condition.
+    - single: If True (default), raises an exception if multiple matching lines are found.
+
+    Returns:
+    - The identified line (str).
+
+    Raises:
+    - MissingStageException: If no lines are found for the given stage.
+    - MultipleInvocationException: If multiple matching lines are found when 'single' is True.
+    """
     stage_lines = stages.get(stage, [])
     matching_lines = [line for line in stage_lines if match(line)]
     if not matching_lines:
@@ -219,6 +234,29 @@ def identify_line(
 def sort_line(
     line: str, clean: FilterProtocol = None, sort: FilterProtocol = None
 ) -> Tuple[str, List[str], List[str]]:
+    """Sort and process a line using filtering operations.
+
+    This function takes a line of text and applies filtering and sorting
+    operations on its tokens. The 'clean' filter is applied first to the
+    tokens, followed by the 'sort' filter. The processed tokens are then
+    used to construct a tuple containing the original command, sorted
+    tokens, and sorted tokens in reverse order (negated).
+
+    Args:
+        line (str): The line to be processed.
+        clean (FilterProtocol, optional): The filter to clean the tokens.
+            Defaults to None.
+        sort (FilterProtocol, optional): The filter to sort the tokens.
+            Defaults to None.
+
+    Returns:
+        Tuple[str, List[str], List[str]]: A tuple containing the original
+            command, sorted tokens, and sorted tokens in reverse order
+            (negated).
+
+    Raises:
+        ArduinoCLIException: If no tokens are available after filtering.
+    """
     clean = clean if clean else FilterProtocol.pass_all
     sort = sort if sort else FilterProtocol.pass_all
 
@@ -231,7 +269,25 @@ def sort_line(
 def identify_link_line(
     stages: Dict[Stage, List[str]], source_objects: List[str]
 ) -> str:
-    """"""
+    """Identify the linking line based on source object names.
+
+    This function identifies the linking line within the context of the
+    LINK stage. It searches for lines within the LINK stage's list of
+    lines and matches them against the provided source object names. The
+    identified line is then returned.
+
+    Args:
+        stages (Dict[Stage, List[str]]): A dictionary mapping stages to
+            lists of lines.
+        source_objects (List[str]): List of source object names to match.
+
+    Returns:
+        str: The identified linking line.
+
+    See Also:
+        identify_line: A general function to identify lines based on
+            stages and criteria.
+    """
     link_line = identify_line(
         Stage.LINK, stages, partial(match_all, source_objects)
     )
@@ -240,7 +296,24 @@ def identify_link_line(
 
 
 def identify_archive_line(stages: Dict[Stage, List[str]]) -> str:
-    """"""
+    r"""Identify the archive line within the CORE stage.
+
+    This function identifies the archive line within the context of the
+    CORE stage. It searches for lines within the CORE stage's list of
+    lines and matches them against the regular expression ``core\.a``.
+    The identified archive line is then returned.
+
+    Args:
+        stages (Dict[Stage, List[str]]): A dictionary mapping stages to
+            lists of lines.
+
+    Returns:
+        str: The identified archive line within the CORE stage.
+
+    See Also:
+        identify_line: A general function to identify lines based on
+            stages and criteria.
+    """
     archive_line = identify_line(
         Stage.CORE, stages, partial(match_all, [r'core\.a']), single=False
     )
@@ -251,14 +324,32 @@ def identify_archive_line(stages: Dict[Stage, List[str]]) -> str:
 def link_tokens(
     stages: Dict[Stage, List[str]], sources: Dict[Source, Path]
 ) -> Tuple[str, List[str], List[str], List[str]]:
-    """"""
+    """Extract linker, flags, objects, and libraries from the link line.
+
+    This function identifies the link line within the context of the
+    LINK stage using the `identify_link_line` function. It then extracts
+    the linker, link flags, link objects, and link libraries from the
+    link line using the `sort_line` function with the appropriate
+    cleaning and sorting filters.
+
+    Parameters:
+        stages (Dict[Stage, List[str]]): A dictionary mapping stages to
+            lists of lines.
+        sources (Dict[Source, Path]): A dictionary mapping source types to
+            their corresponding paths.
+
+    Returns:
+        Tuple[str, List[str], List[str], List[str]]: A tuple containing the
+            identified linker, a list of link flags, a list of link objects,
+            and a list of link libraries.
+    """
     object_names = [
         f'{name}.o' for name in real_source_names(sources).values()
     ]
     link_line = identify_link_line(stages, object_names)
 
     def cleaner(items: List[str]) -> List[str]:
-        """Cleans out -c -o <arg> and filename arguments."""
+        """Clean out -c -o <arg> and filename arguments."""
         return filter_by_filenames(
             object_names, filter_by_flags({'-o': True}, items)
         )
@@ -284,6 +375,25 @@ def link_tokens(
 
 
 def archive_tokens(stages: Dict[Stage, List[str]]) -> Tuple[str, List[str]]:
+    """Extract archive tool and flags from the archive line.
+
+    This function identifies the archive line within the context of the
+    CORE stage using the `identify_archive_line` function. It then
+    extracts the archiver, archive flags, and ignored list from the
+    archive line using the `sort_line` function with the appropriate
+    cleaning and sorting filters.
+
+    Parameters:
+        stages (Dict[Stage, List[str]]): A dictionary mapping stages to
+            lists of lines.
+
+    Returns:
+        Tuple[str, List[str]]: A tuple containing the identified archiver
+            and a list of archive flags.
+
+    Raises:
+        AssertionError: If the ignored list from sorting is not empty.
+    """
     archive_line = identify_archive_line(stages)
     archive_cleaner = partial(filter_by_filenames, [r'core\.a', r'\.o'])
     archiver, archive_flags, _ = sort_line(archive_line, archive_cleaner)
@@ -297,7 +407,29 @@ def archive_tokens(stages: Dict[Stage, List[str]]) -> Tuple[str, List[str]]:
 def post_link_lines(
     stages: Dict[Stage, List[str]], sources: Dict[Source, Path]
 ) -> List[str]:
-    """"""
+    """Get the post-link steps based on identified link line.
+
+    This function extracts the post-link steps from the lines following
+    the identified linking line within the context of the LINK stage.
+    It first generates a list of object names from the provided sources,
+    then identifies the linking line using the object names. Subsequently,
+    it extracts the lines that follow the identified link line and returns
+    them as a list of post-link steps.
+
+    Args:
+        stages (Dict[Stage, List[str]]): A dictionary mapping stages to
+            lists of lines.
+        sources (Dict[Source, Path]): A dictionary mapping source types to
+            their corresponding paths.
+
+    Returns:
+        List[str]: A list of post-link steps following the identified
+            linking line.
+
+    See Also:
+        identify_link_line: A function to identify the linking line based
+            on source object names.
+    """
     object_names = [
         f'{name}.o' for name in real_source_names(sources).values()
     ]
