@@ -1,4 +1,4 @@
-""" Data mining operations on the build stage data
+"""Data mining operations on the build stage data.
 
 Handles the data mining operations on the output of the build stages.
 """
@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def real_source_names(source_mappings: Dict[Source, Path]):
-    """Get the real source names from the source map"""
+    """Get the real source names from the source map."""
     return {
         source: value.name if source != Source.INO else f'{value.name}.cpp'
         for source, value in source_mappings.items()
@@ -36,7 +36,7 @@ def real_source_names(source_mappings: Dict[Source, Path]):
 def filter_by_flags(
     flags: Dict[str, bool], tokens: List[str], negate=False
 ) -> List[str]:
-    """Filter a set of tokens based on a set of flags
+    """Filter a set of tokens based on a set of flags.
 
     Reduce the set of tokens to ensure that it does not include any of the matching flags, unless negate is specified
     then only the matching flags are exposed. Tokens is a list of tokens, and flags is a dictionary of the flag (e.g.
@@ -52,7 +52,7 @@ def filter_by_flags(
     """
 
     def filterer(token: str, previous: Union[None, str]):
-        """Filtering function taking current and previous token"""
+        """Filtering function taking current and previous token."""
         value = match_any(flags.keys(), token[:2])
         value = value or match_any(
             [
@@ -75,7 +75,7 @@ def filter_by_flags(
 def filter_by_filenames(
     filenames: List[str], tokens: List[str], negate=False
 ) -> List[str]:
-    """Filter a set of tokens based on a set of filenames
+    """Filter a set of tokens based on a set of filenames.
 
     Filter a list of tokens by a list of filenames. In normal operation these filenames are removed. If negate is
     specified then only those tokens are kept.
@@ -90,7 +90,7 @@ def filter_by_filenames(
     """
 
     def filterer(item: str):
-        """Filterer that can also negate"""
+        """Filterer that can also negate."""
         value = match_any(filenames, item)
         return not value if negate else value
 
@@ -103,7 +103,7 @@ def build_tokens(
 ) -> Tuple[
     Dict[Source, str], Dict[Source, List[str]], Dict[Source, List[str]]
 ]:
-    """Detect command line build tokens for each source type
+    """Detect command line build tokens for each source type.
 
     Looks at the source build invocation for each file in the source mapping, and determines the command line arguments
     used for the build of that source file. The <source file>, <source_file>.o and -o flag proceeding the .o are all
@@ -128,7 +128,7 @@ def build_tokens(
     }
 
     def cleaner(items: List[str]) -> List[str]:
-        """Cleans out -c -o <arg> and filename arguments"""
+        """Cleans out -c -o <arg> and filename arguments."""
         return filter_by_filenames(
             list(real_names.values()),
             filter_by_flags({'-c': False, '-o': True}, items),
@@ -167,7 +167,7 @@ def build_tokens(
 
 
 def sketch_cache(stages: Dict[Stage, List[str]]) -> Path:
-    """Detect the sketch cache Arduino uses
+    """Detect the sketch cache Arduino uses.
 
     Detects the cache used by Arduino for compiling the core, generating precompiled headers, and other scratch work
     that this tool can borrow as output.
@@ -224,7 +224,7 @@ def sort_line(
 def identify_link_line(
     stages: Dict[Stage, List[str]], source_objects: List[str]
 ) -> str:
-    """ """
+    """"""
     link_line = identify_line(
         Stage.LINK, stages, partial(match_all, source_objects)
     )
@@ -233,7 +233,7 @@ def identify_link_line(
 
 
 def identify_archive_line(stages: Dict[Stage, List[str]]) -> str:
-    """ """
+    """"""
     archive_line = identify_line(
         Stage.CORE, stages, partial(match_all, [r'core\.a']), single=False
     )
@@ -251,7 +251,7 @@ def link_tokens(
     link_line = identify_link_line(stages, object_names)
 
     def cleaner(items: List[str]) -> List[str]:
-        """Cleans out -c -o <arg> and filename arguments"""
+        """Cleans out -c -o <arg> and filename arguments."""
         return filter_by_filenames(
             object_names, filter_by_flags({'-o': True}, items)
         )

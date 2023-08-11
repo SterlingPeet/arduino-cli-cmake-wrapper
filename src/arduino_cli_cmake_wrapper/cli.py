@@ -132,7 +132,7 @@ def parse_arguments(arguments: Optional[List[str]]) -> argparse.Namespace:
 
 
 def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
-    """Remap a value with the given string to string transformations
+    """Remap a value with the given string to string transformations.
 
     Remaps a value with the input set of string to string mappings. Strings will "replace" the first token with the
     second in-order. Lists remap each child element recursively. Dictionaries remap the key and recursively remap the
@@ -146,10 +146,10 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
     """
 
     def remapper(item: str) -> str:
-        """Function to remap a string using the remaps input"""
+        """Function to remap a string using the remaps input."""
 
         def remap_one(accumulation: str, remap: Tuple[str, str]) -> str:
-            """Remap for a single tuple"""
+            """Remap for a single tuple."""
             return accumulation.replace(remap[0], remap[1])
 
         return reduce(remap_one, remaps.items(), f'{item}')
@@ -174,7 +174,7 @@ def remap_output(
     cache_path: Path,
     test_files: Dict[Source, Path],
 ) -> Dict:
-    """Remap output data by setting up remapping dictionary and then calling convert_to_output
+    """Remap output data by setting up remapping dictionary and then calling convert_to_output.
 
     The given output data is remapped to remove python data types, replace the cache path with the destination output
     directory, and test files to <TARGET...> replacement tags. post-link also remaps output directory with
@@ -219,7 +219,7 @@ def assemble_output_data(
     include: bool,
     post_link: bool,
 ) -> Tuple[Dict, Path]:
-    """Assemble the output data via data mining
+    """Assemble the output data via data mining.
 
     Compiler, link, archival, and post link data is mined. It is then assembled into the output data object based on the
     options specified to control the output data.

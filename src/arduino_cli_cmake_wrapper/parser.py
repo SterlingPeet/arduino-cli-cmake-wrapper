@@ -1,4 +1,4 @@
-""" Parsing functions to refine the arduino-cli output
+"""Parsing functions to refine the arduino-cli output.
 
 This module contains the functions used to parse the arduino-cli output and refine it into something more useful for the
 external application. This parsing is three steps:
@@ -33,7 +33,7 @@ ANNOTATION_MAP = {
 
 
 def sectioner(stdout: str) -> List[Tuple[str, List[str]]]:
-    """Section stdout into the arduino-cli indicated sections
+    """Section stdout into the arduino-cli indicated sections.
 
     Create a list of sections (name, list of output lines) as announced by the arduino-cli. arduino-cli announces these
     sections with a line ending in "..." where the preceding text describes what is being done. These sections will be
@@ -60,7 +60,7 @@ def sectioner(stdout: str) -> List[Tuple[str, List[str]]]:
 
 
 def invocation_filter(lines: List[str]) -> List[str]:
-    """Filters the lines to direct invocations
+    """Filters the lines to direct invocations.
 
     arduino-cli records invocations of tools, but also reports standard output of those tools. This filter reduces the
     set of output lines into specifically those that are real invocations as defined by: a line where the line is a
@@ -84,7 +84,7 @@ def invocation_filter(lines: List[str]) -> List[str]:
 def annotate(
     sections: List[Tuple[str, List[str]]]
 ) -> List[Tuple[Stage, List[str]]]:
-    """Annotate the stage output with pre-defined stage type
+    """Annotate the stage output with pre-defined stage type.
 
     Annotate the sections with the pre-defined build stage that that section represents. UNUSED will annotate sections
     that are not used in the larger application
@@ -101,7 +101,7 @@ def annotate(
 
 
 def parse(stdout: str) -> Dict[Stage, List[str]]:
-    """Parses the standard output of the arduino build into annotated sections
+    """Parses the standard output of the arduino build into annotated sections.
 
     Parse the standard output the arduino-cli into sections. These sections are then annotated with the section's role
     in the build process. These annotated sections are then placed in an in-order dictionary that represents a queryable
@@ -110,7 +110,6 @@ def parse(stdout: str) -> Dict[Stage, List[str]]:
     Args:
         stdout: standard output from the test-build
     Return:
-
     """
     raw_sections = sectioner(stdout)
     sections = [

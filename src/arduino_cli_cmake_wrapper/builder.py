@@ -1,4 +1,4 @@
-""" Handles the setup and build of the arduino-cli test build
+"""Handles the setup and build of the arduino-cli test build.
 
 The core of the arduino-cli-wrapper runs arduino-cli with a test build and mines the output for the necessary build
 steps for compiling Arduino programs generically. This module contains the functions for setting-up, running, and
@@ -22,7 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
-    """Create a sketch folder with at least a C, C++, and assembly file
+    """Create a sketch folder with at least a C, C++, and assembly file.
 
     Arduino must compile sketches and in order to determine the necessary compilation information we must create a
     sketch that uses each of these constructs for compilation. This function will generate a sketch using these
@@ -94,7 +94,7 @@ def compile_sketch(
 def build(
     board: str, libraries: List[str], args: Union[List[str], None] = None
 ) -> Tuple[Dict[Source, Path], str, str]:
-    """Run the test build and produce the raw build console output
+    """Run the test build and produce the raw build console output.
 
     Runs the arduino build under the given constraints: board type, list of libraries needed from arduino, and the set
     of pass-through arguments to supply directly to the command invocation.

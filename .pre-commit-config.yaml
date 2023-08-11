@@ -61,7 +61,8 @@ repos:
   rev: v1.7.1
   hooks:
   - id: docformatter
-    args: [--in-place, --wrap-summaries, '95', --config, ./pyproject.toml]
+    additional_dependencies: [tomli]
+    args: [--in-place, --config, ./pyproject.toml]
 - repo: https://github.com/myint/rstcheck
   rev: v6.1.2
   hooks:
