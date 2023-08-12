@@ -2,11 +2,7 @@
 """Setup script to install the ``arduino-cli-cmake-wrapper`` package."""
 
 import re
-from glob import glob
-from os.path import basename
-from os.path import dirname
-from os.path import join
-from os.path import splitext
+from pathlib import Path
 
 from setuptools import find_packages
 from setuptools import setup
@@ -14,9 +10,8 @@ from setuptools import setup
 
 def read(*names, **kwargs):
     """Read file and return contents as a string."""
-    with open(
-        join(dirname(__file__), *names),
-        encoding=kwargs.get('encoding', 'utf8'),
+    with Path(__file__).parent.joinpath(*names).open(
+        encoding=kwargs.get('encoding', 'utf8')
     ) as fh:
         return fh.read()
 
@@ -37,7 +32,7 @@ setup(
     url='https://github.com/SterlingPeet/arduino-cli-cmake-wrapper',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    py_modules=[path.stem for path in Path('src').glob('*.py')],
     include_package_data=True,
     zip_safe=False,
     classifiers=[

@@ -32,7 +32,6 @@ class FilterProtocol(Protocol):
 
     def __call__(self, tokens: List[str], negate: bool = False) -> List[str]:
         """Apply the filtering protocol on the provided tokens."""
-        pass
 
     @staticmethod
     def pass_all(tokens: List[str], negate: bool = False):

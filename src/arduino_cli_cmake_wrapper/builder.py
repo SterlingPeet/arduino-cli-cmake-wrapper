@@ -47,7 +47,7 @@ def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
     for _, path in mappings.items():
         path.touch()
     # Create main sketch as an ino file such that it is a valid sketch
-    with open(mappings.get(Source.INO), 'w') as file_handle:
+    with Path.open(mappings.get(Source.INO), 'w') as file_handle:
         include_set = '\n'.join(
             f'#include <{library}.h>' for library in libraries
         )
@@ -87,7 +87,9 @@ def compile_sketch(
     ]
     LOGGER.debug('Invoking: %s', ' '.join(arguments))
 
-    process = subprocess.run(arguments, text=True, capture_output=True)
+    process = subprocess.run(
+        arguments, text=True, capture_output=True  # noqa: S603
+    )
     if process.returncode != 0:
         raise FauxBuildException(
             f'arduino-cli failed with return code: {process.returncode}',

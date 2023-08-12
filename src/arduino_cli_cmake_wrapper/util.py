@@ -60,7 +60,7 @@ def safe_split(line: str, ignore_errors: bool = False) -> List[str]:
     except ValueError as ve:
         if ignore_errors:
             return []
-        raise ValueError(f"{ve} in '{line}'")
+        raise ValueError(f"{ve} in '{line}'") from ve
 
 
 def prefixed_join(join_string: str, lines: List[str]) -> str:

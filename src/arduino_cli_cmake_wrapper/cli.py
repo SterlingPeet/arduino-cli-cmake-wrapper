@@ -295,7 +295,7 @@ def main(arguments: List[str] = None):
 
         # Output the data as JSON
         with (
-            open(arguments.json_file, 'w')
+            Path.open(arguments.json_file, 'w')
             if arguments.json_file is not None
             else sys.stdout
         ) as file_handle:
