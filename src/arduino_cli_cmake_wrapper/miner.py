@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Callable
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -15,6 +16,7 @@ from .types import ArduinoCLIException
 from .types import FilterProtocol
 from .types import MissingStageException
 from .types import MultipleInvocationException
+from .types import PassAllFilter
 from .types import Source
 from .types import Stage
 from .util import match_all
@@ -55,6 +57,7 @@ def filter_by_flags(
 
     def filterer(token: str, previous: Union[None, str]):
         """Filter function taking current and previous token."""
+        prev = previous[:2] if previous else ''
         value = match_any(flags.keys(), token[:2])
         value = value or match_any(
             [
@@ -63,7 +66,7 @@ def filter_by_flags(
                 if (callable(check) and check(previous))
                 or (not callable(check) and check)
             ],
-            previous[:2],
+            prev,
         )
         return not value if negate else value
 
@@ -133,13 +136,19 @@ def build_tokens(
         for source in Source
     }
 
-    def cleaner(items: List[str]) -> List[str]:
+    class Cleaner(FilterProtocol):
         """Clean out -c -o <arg> and filename arguments."""
-        return filter_by_filenames(
-            list(real_names.values()),
-            filter_by_flags({'-c': False, '-o': True}, items),
-        )
 
+        def __call__(
+            self, tokens: List[str], negate: bool = False
+        ) -> List[str]:
+            """Clean out -c -o <arg> and filename arguments."""
+            return filter_by_filenames(
+                list(real_names.values()),
+                filter_by_flags({'-c': False, '-o': True}, tokens),
+            )
+
+    cleaner = Cleaner()
     sorter = partial(filter_by_flags, {'-I': lambda item: item == '-I'})
 
     sorted_source_lines = {
@@ -232,7 +241,9 @@ def identify_line(
 
 
 def sort_line(
-    line: str, clean: FilterProtocol = None, sort: FilterProtocol = None
+    line: str,
+    clean: Optional[FilterProtocol] = None,
+    sort: Optional[FilterProtocol] = None,
 ) -> Tuple[str, List[str], List[str]]:
     """Sort and process a line using filtering operations.
 
@@ -257,8 +268,8 @@ def sort_line(
     Raises:
         ArduinoCLIException: If no tokens are available after filtering.
     """
-    clean = clean if clean else FilterProtocol.pass_all
-    sort = sort if sort else FilterProtocol.pass_all
+    clean = clean if clean else PassAllFilter()
+    sort = sort if sort else PassAllFilter()
 
     tokens = clean(safe_split(line))
     if not tokens:
@@ -348,11 +359,18 @@ def link_tokens(
     ]
     link_line = identify_link_line(stages, object_names)
 
-    def cleaner(items: List[str]) -> List[str]:
-        """Clean out -c -o <arg> and filename arguments."""
-        return filter_by_filenames(
-            object_names, filter_by_flags({'-o': True}, items)
-        )
+    class Cleaner(FilterProtocol):
+        """Filter to clean out -c -o <arg> and filename arguments."""
+
+        def __call__(
+            self, tokens: List[str], negate: bool = False
+        ) -> List[str]:
+            """Filter to clean out -c -o <arg> and filename arguments."""
+            return filter_by_filenames(
+                object_names, filter_by_flags({'-o': True}, tokens)
+            )
+
+    cleaner = Cleaner()
 
     link_sorter = partial(
         filter_by_filenames,

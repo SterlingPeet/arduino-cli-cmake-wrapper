@@ -46,8 +46,10 @@ def make_sketch(directory: Path, libraries: List[str]) -> Dict[Source, Path]:
     # Create an empty source of each type
     for _, path in mappings.items():
         path.touch()
+    ino_file = mappings.get(Source.INO)
+    assert ino_file is not None
     # Create main sketch as an ino file such that it is a valid sketch
-    with Path.open(mappings.get(Source.INO), 'w') as file_handle:
+    with Path.open(ino_file, 'w') as file_handle:
         include_set = '\n'.join(
             f'#include <{library}.h>' for library in libraries
         )

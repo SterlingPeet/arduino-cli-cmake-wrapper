@@ -33,8 +33,11 @@ class FilterProtocol(Protocol):
     def __call__(self, tokens: List[str], negate: bool = False) -> List[str]:
         """Apply the filtering protocol on the provided tokens."""
 
-    @staticmethod
-    def pass_all(tokens: List[str], negate: bool = False):
+
+class PassAllFilter(FilterProtocol):
+    """Pass all tokens through the filter (default)."""
+
+    def __call__(self, tokens: List[str], negate: bool = False) -> List[str]:
         """Pass all tokens through the filter (default)."""
         return [] if negate else tokens
 

@@ -1,7 +1,6 @@
 """Utility functions for the Arudino wrapper."""
 import re
 import shlex
-from functools import reduce
 from pathlib import Path
 from typing import Any
 from typing import Dict
@@ -12,21 +11,19 @@ from typing import List
 def match_any(matches: Iterable[str], item: str) -> bool:
     """Return true iff item matches anything in the list."""
     matchers = [re.compile(pattern) for pattern in matches]
-    return reduce(
-        lambda accum, potential: accum or potential.search(item),
-        matchers,
-        False,
-    )
+    for potential in matchers:
+        if potential.search(item) is not None:
+            return True
+    return False
 
 
 def match_all(matches: Iterable[str], item: str) -> bool:
     """Return true iff item matches all items in the list."""
     matchers = [re.compile(pattern) for pattern in matches]
-    return reduce(
-        lambda accum, potential: accum and potential.search(item),
-        matchers,
-        True,
-    )
+    for potential in matchers:
+        if potential.search(item) is None:
+            return False
+    return True
 
 
 def get_path_from_flag(item: str) -> Path:

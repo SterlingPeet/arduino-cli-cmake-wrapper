@@ -244,7 +244,7 @@ def assemble_output_data(
     archiver, archive_flags = archive_tokens(stages)
     post_link_steps = post_link_lines(stages, test_files)
 
-    data = {}
+    data: dict[str, Any] = {}
     if detect:
         data['tools'] = {**compilers, 'LINKER': linker, 'AR': archiver}
         data['flags'] = {
@@ -261,19 +261,17 @@ def assemble_output_data(
     return data, sketch_cache(stages)
 
 
-def main(arguments: List[str] = None):
+def main(arguments: Optional[List[str]] = None):
     """Perform entrypoint functions."""
     try:
-        arguments = parse_arguments(arguments)
-        output_directory = Path(arguments.output)
+        args = parse_arguments(arguments)
+        output_directory = Path(args.output)
         logging.basicConfig(
             level=logging.DEBUG
-        ) if arguments.debug else logging.basicConfig(level=logging.INFO)
+        ) if args.debug else logging.basicConfig(level=logging.INFO)
 
         # Run the build
-        test_file_map, stdout, stderr = build(
-            arguments.board, arguments.libraries, []
-        )
+        test_file_map, stdout, stderr = build(args.board, args.libraries, [])
 
         # Parse the output into stages
         stages = parse(stdout)
@@ -282,9 +280,9 @@ def main(arguments: List[str] = None):
         output_data, cache_path = assemble_output_data(
             test_file_map,
             stages,
-            arguments.detect_settings,
-            arguments.includes,
-            arguments.post_link,
+            args.detect_settings,
+            args.includes,
+            args.post_link,
         )
 
         # Remap the output data
@@ -295,14 +293,14 @@ def main(arguments: List[str] = None):
 
         # Output the data as JSON
         with (
-            Path.open(arguments.json_file, 'w')
-            if arguments.json_file is not None
+            Path.open(args.json_file, 'w')
+            if args.json_file is not None
             else sys.stdout
         ) as file_handle:
             json.dump(output_data, file_handle, indent=4)
 
         # Outputs the sketch cache for ingestion into larger build
-        if arguments.generate_code:
+        if args.generate_code:
             if output_directory.exists():
                 shutil.rmtree(output_directory)
             shutil.copytree(cache_path, output_directory)
