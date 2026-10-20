@@ -122,7 +122,7 @@ def build_tokens(
         stages: parsed and annotated build information
         sources: mapping of source type to test source used
 
-    Return:
+    Returns:
         tuple of dictionaries: source to compiler, source to include paths, and source to build flags
     """
     real_names = real_source_names(sources)
@@ -180,7 +180,7 @@ def sketch_cache(stages: Dict[Stage, List[str]]) -> Path:
 
     Args:
         stages: stages of the build output
-    Return:
+    Returns:
         path to Arduino cache directory
     """
     core_lines = stages.get(Stage.CORE)
@@ -327,7 +327,7 @@ def link_tokens(
     link line using the `sort_line` function with the appropriate
     cleaning and sorting filters.
 
-    Parameters:
+    Args:
         stages (Dict[Stage, List[str]]): A dictionary mapping stages to
             lists of lines.
         sources (Dict[Source, Path]): A dictionary mapping source types to
@@ -381,7 +381,7 @@ def archive_tokens(stages: Dict[Stage, List[str]]) -> Tuple[str, List[str]]:
     archive line using the `sort_line` function with the appropriate
     cleaning and sorting filters.
 
-    Parameters:
+    Args:
         stages (Dict[Stage, List[str]]): A dictionary mapping stages to
             lists of lines.
 

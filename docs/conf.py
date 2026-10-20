@@ -18,9 +18,9 @@ year = '2022-2024'
 author = 'Sterling Lewis Peet'
 copyright = f'{year}, {author}'
 try:
-    from pkg_resources import get_distribution
+    from importlib.metadata import version as distribution_version
 
-    version = release = get_distribution('arduino_cli_cmake_wrapper').version
+    version = release = distribution_version('arduino-cli-cmake-wrapper')
 except Exception:
     import traceback
 

@@ -63,7 +63,7 @@ repos:
   - id: mypy
     additional_dependencies: [types-setuptools]
 - repo: https://github.com/PyCQA/docformatter
-  rev: v1.7.5
+  rev: v1.7.8
   hooks:
   - id: docformatter
     additional_dependencies: [tomli]
@@ -84,4 +84,5 @@ repos:
   rev: v1.5.0
   hooks:
   - id: detect-secrets
+    exclude: ^tests/data/
           # args: [--baseline, ci/secrets.baseline]

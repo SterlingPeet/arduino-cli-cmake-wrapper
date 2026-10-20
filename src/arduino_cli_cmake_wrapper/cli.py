@@ -152,7 +152,7 @@ def convert_to_output(value: Any, remaps: Dict[str, str]) -> Any:
     Args:
         value: value to remap, works best if a string, list, or dictionary
         remaps: dictionary of original to new strings to remap
-    Return:
+    Returns:
         remapped value
     """
 
@@ -197,7 +197,7 @@ def remap_output(
         output_directory: directory where cache will be copied
         cache_path: path to the original cache
         test_files: source-to-files used to build the sample
-    Return:
+    Returns:
         remapped data
     """
     mappings = {
@@ -242,7 +242,7 @@ def assemble_output_data(
         include: include paths
         post_link: create post-link steps
 
-    Return:
+    Returns:
         assembled data.
     """
     compilers, includes, build_flags = build_tokens(stages, test_files)

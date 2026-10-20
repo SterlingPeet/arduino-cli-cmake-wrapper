@@ -92,7 +92,7 @@ def annotate(sections: List[Tuple[str, List[str]]]) -> List[Tuple[Stage, List[st
 
     Args:
         sections: sections of raw build steps
-    Return:
+    Returns:
         ordered and annotated build steps
     """
     return [
@@ -110,7 +110,7 @@ def parse(stdout: str) -> Dict[Stage, List[str]]:
 
     Args:
         stdout: standard output from the test-build
-    Return:
+    Returns:
     """
     raw_sections = sectioner(stdout)
     sections = [(title, invocation_filter(lines)) for title, lines in raw_sections]

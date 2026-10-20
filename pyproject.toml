@@ -1,68 +1,60 @@
 [build-system]
-requires = [
-    "setuptools>=30.3.0",
-    "setuptools_scm[toml]>=6.2",
-    "wheel"
-]
 build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=30.3.0",
+  "setuptools_scm[toml]>=6.2",
+  "wheel"
+]
 
 [project]
-name = "arduino-cli-cmake-wrapper"
-dynamic = ["version"]
-description = "A wrapper for arduino CLI allowing it to integrate with a CMakeSystem"
-readme = "README.rst"
-requires-python = ">=3.8"
-license = {file = "LICENSE"}
-keywords = ["fprime", "embedded", "nasa", "arduino", "cmake"]
 authors = [
-  {name = "Sterling Lewis Peet", email = "sterling.peet@gatech.edu"},
-  {name = "Michael Starch", email = "Michael.D.Starch@jpl.nasa.gov"},
-  {name = "Thomas Boyer-Chammard", email = "Thomas.Boyer.Chammard@jpl.nasa.gov"},
+  { name = "Sterling Lewis Peet", email = "sterling.peet@gatech.edu" },
+  { name = "Michael Starch", email = "Michael.D.Starch@jpl.nasa.gov" },
+  { name = "Thomas Boyer-Chammard", email = "Thomas.Boyer.Chammard@jpl.nasa.gov" }
 ]
-
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "Operating System :: Unix",
-    "Operating System :: POSIX",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
-    "License :: OSI Approved :: Apache Software License",
-    'Topic :: Utilities',
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Operating System :: Unix",
+  "Operating System :: POSIX",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "License :: OSI Approved :: Apache Software License",
+  'Topic :: Utilities'
 ]
-
 dependencies = []
+description = "A wrapper for arduino CLI allowing it to integrate with a CMakeSystem"
+dynamic = ["version"]
+keywords = ["fprime", "embedded", "nasa", "arduino", "cmake"]
+license = { file = "LICENSE" }
+name = "arduino-cli-cmake-wrapper"
+readme = "README.rst"
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
 
-[project.urls]
-Documentation = "https://arduino-cli-cmake-wrapper.readthedocs.io/"
-Changelog = "https://arduino-cli-cmake-wrapper.readthedocs.io/en/latest/changelog.html"
-Issues = "https://github.com/SterlingPeet/arduino-cli-cmake-wrapper/issues"
-Repository = "https://github.com/SterlingPeet/arduino-cli-cmake-wrapper"
-
-####
+# ###
 # Entry Points:
 #
 # Defines the list of entry-level (scripts) that are defined by this package. This allows
 # standard use of utilities that ship as part of F prime.
-####
+# ###
 [project.scripts]
 arduino-cli-wrapper = "arduino_cli_cmake_wrapper.cli:main"
 
-####
-# setuptools_scm dynamically generates version number from git, as well as automatically
-# include all data files tracked by git (e.g. cookiecutter templates).
-# See https://setuptools.pypa.io/en/latest/userguide/datafiles.html
-####
-[tool.setuptools_scm]
+[project.urls]
+Changelog = "https://arduino-cli-cmake-wrapper.readthedocs.io/en/latest/changelog.html"
+Documentation = "https://arduino-cli-cmake-wrapper.readthedocs.io/"
+Issues = "https://github.com/SterlingPeet/arduino-cli-cmake-wrapper/issues"
+Repository = "https://github.com/SterlingPeet/arduino-cli-cmake-wrapper"
 
 [tool.docformatter]
 recursive = true
@@ -125,8 +117,14 @@ forced-separate = ["conftest"]
 [tool.ruff.lint.per-file-ignores]
 "ci/*" = ["S"]
 
+# ###
+# setuptools_scm dynamically generates version number from git, as well as automatically
+# include all data files tracked by git (e.g. cookiecutter templates).
+# See https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+# ###
+[tool.setuptools_scm]
 
-####
+# ###
 # Additional notes
 #
 # With regards to the configuration of the older versions of setup.py:
@@ -136,4 +134,4 @@ forced-separate = ["conftest"]
 # Reference:
 # - https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
 # - https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
-####
+# ###
